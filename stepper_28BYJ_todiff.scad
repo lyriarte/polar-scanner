@@ -21,6 +21,10 @@ module StepMotor28BYJ()
 				// handle
 				color("red") translate([11,0,-16.55]) cube([4 + jeu,5 + jeu,6.1], center = true);
 				color("red") translate([5,0,-16.55]) cube([4 + jeu,5 + jeu,6.1], center = true);
+
+				// screw holes
+				color("red") translate([0,17.5,-9])	cylinder(h = 2, r = 2 - jeu, center = true, $fn = 32);
+				color("red") translate([0,-17.5,-9])	cylinder(h = 2, r = 2 - jeu, center = true, $fn = 32);
 		}
 	}
 

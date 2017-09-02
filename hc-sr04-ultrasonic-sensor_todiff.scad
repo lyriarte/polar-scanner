@@ -8,6 +8,8 @@
 
 module sensorHCSR04()
 {
+  difference()
+  {
 	union()
 	{
 		color("DARKBLUE")cube([45,20,1.2]);
@@ -17,6 +19,12 @@ module sensorHCSR04()
 		translate([(45/2)-((2.45*4)/2)+0.6,2,-0.2]) rotate([180,0,0]) headerPin(4);
 	}
 
+	union()
+	{
+		color("DARKBLUE") translate([2.5,2.5,-1]) cylinder(r=2/2-jeu, h=3, $fn=50);
+		color("DARKBLUE") translate([2.5+40,2.5+15,-1]) cylinder(r=2/2-jeu, h=3, $fn=50);
+	}
+  }
 }
 
 module ultrasonicSensor()

@@ -22,6 +22,15 @@ module servo()
 #    rotate([0,0,270]) translate([-sg90l/2,sg90L+sg90topCylinderH,0]) rotate([90,0,0]) servoSG90();
 }
 
+module dovetail(jeu_dovetail)
+{
+	hull()
+	{
+		cube([6,3+jeu_dovetail,0.1],center=true);
+		translate([0,0,-2]) cube([6,6+jeu_dovetail,0.1],center=true);
+	}
+}
+
 module sensorholder()
 {
     difference()
@@ -48,8 +57,11 @@ module tigeservo()
 			cylinder(h=10, r=10);
 			translate([deportX+5,0,0]) cylinder(h=tigeH, r=5);
 		}
+		translate([0,0,5]) rotate([0,90,180]) cylinder(h=50, r=1);
 		translate([0,12,tigeH-5]) rotate([90,0,0]) scale([1,0.5,1]) cylinder(h=24, r=deportX+3);
 		translate([deportX*4/3,12,0]) rotate([90,0,0]) cylinder(h=24, r=3+deportX/2);
+		translate([deportX+6,0,tigeH]) dovetail(0.2);
+		translate([deportX+8,0,tigeH]) dovetail(0.2);		
 		translate([0,0,-20]) stepper();
 	}
 }
@@ -61,6 +73,7 @@ module servoholder()
 		translate([1,-22.5,-2]) cube([9,35,16]);
 		translate([0,0,0.1]) servo();
 	}
+	translate([6,0,-2]) dovetail(0);
 }
 
 module tige()

@@ -18,8 +18,8 @@ module servoSG90() {
     axisD = sg90axisD;
     
     screwHoleCenter=2;
-    screwHoleD=2;
-    holeSize=1;
+    screwHoleD=2 - jeu;
+    holeSize=1 - jeu;
     
     difference() {
         union() {
@@ -44,6 +44,18 @@ module servoSG90() {
                     cylinder(d=axisD,h=axisH, $fn=180);
                 }
             }
+        }
+        translate([-(plateL - L) / 2 + screwHoleCenter, l/2, plateHPos]) {
+            cylinder(d=screwHoleD, h=10, $fn=180, center=true);
+        }
+        translate([-(plateL - L) / 2 - 1, l / 2 - holeSize / 2, plateHPos - 1]) {
+            cube([3,holeSize,4]);
+        }
+        translate([plateL - (plateL - L) / 2 - screwHoleCenter, l / 2, plateHPos - 1]) {
+            cylinder(d=screwHoleD, h=10, $fn=180, center=true);
+        }
+        translate([plateL- (plateL - L) / 2 - screwHoleCenter, l / 2 - holeSize / 2, plateHPos -1]) {
+            cube([3,holeSize,4]);
         }
     }
 }
