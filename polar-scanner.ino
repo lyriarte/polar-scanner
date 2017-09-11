@@ -10,7 +10,8 @@
  * **** **** **** **** **** ****/
 
 #define BPS_HOST 9600
-#define COMMS_BUFFER_SIZE 256
+#define COMMS_BUFFER_SIZE 32
+#define SERIAL_HOST_DELAY_MS 10000
 
 /* 
  * ultra sonic telemeter mesure
@@ -150,15 +151,19 @@ int telemeterMesure() {
  * userIO
  */
 char * userInput(char * message) {
-	char * input = NULL;
+	unsigned long timeLoopStart,timeLoop;
 	int nread = 0;
-	Serial.print(message);
-	while (!(nread = Serial.readBytes(commsBuffer, COMMS_BUFFER_SIZE)));
-	if (nread == COMMS_BUFFER_SIZE)
-		return input; // buffer overflow
+	if (message)
+		Serial.print(message);
+	timeLoopStart = timeLoop = millis();
+	// Serial timeout triggers on full commsBuffer, just wait for first command
+	while (nread == 0 && timeLoop - timeLoopStart < SERIAL_HOST_DELAY_MS) {
+		// drop older contents on buffer overflow
+		while ((nread = Serial.readBytes(commsBuffer, COMMS_BUFFER_SIZE)) == COMMS_BUFFER_SIZE);
+		timeLoop = millis();
+	}		
 	commsBuffer[nread] = 0;
-	input = commsBuffer;
-	return input;
+	return nread == 0 ? NULL : commsBuffer;
 }
 
 /* 
@@ -179,8 +184,10 @@ int stateTransition(int currentState) {
 			break;
 
 		case IN_CMD:
-			if (!(input = userInput("CMD: ")))
+			if (!(input = userInput("CMD: "))) {
+				newState = IN_CMD;
 				break;
+			}
 			if (!strcmp(input,"SERVO"))
 				newState = IN_SERVO;
 			else if (!strcmp(input,"STEPPER"))
@@ -191,7 +198,7 @@ int stateTransition(int currentState) {
 
 		case IN_SERVO:
 			if (!(input = userInput("ANGLE: ")))
-				break;
+				while (!(input = userInput(NULL)));
 			value = atoi(input);
 			servoCommand(value);
 			newState = IN_CMD;
@@ -199,7 +206,7 @@ int stateTransition(int currentState) {
 
 		case IN_STEPPER:
 			if (!(input = userInput("STEPS: ")))
-				break;
+				while (!(input = userInput(NULL)));
 			value = atoi(input);
 			stepperCommand(value);
 			newState = IN_CMD;
