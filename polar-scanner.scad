@@ -26,8 +26,8 @@ module dovetail(jeu_dovetail)
 {
 	hull()
 	{
-		cube([6,3+jeu_dovetail,0.1],center=true);
-		translate([0,0,-2]) cube([6,6+jeu_dovetail,0.1],center=true);
+		cube([9,3+jeu_dovetail,0.1],center=true);
+		translate([0,0,-2-jeu_dovetail]) cube([9,6+jeu_dovetail,0.1],center=true);
 	}
 }
 
@@ -42,9 +42,9 @@ module sensorholder()
                 cube([2.5,24,10]);
                 translate([-0.1,12,5]) rotate([0,90,0]) cylinder(d=sg90axisD, h=1.5);
             }
-            cube([50,24,2.5]);
+            cube([52,24,2.5]);
         }
-        translate([-2.5,2,0]) sensor();
+        translate([-6,2,0]) sensor();
     }
 }
 
@@ -60,8 +60,8 @@ module tigeservo()
 		translate([0,0,5]) rotate([0,90,180]) cylinder(h=50, r=1);
 		translate([0,12,tigeH-5]) rotate([90,0,0]) scale([1,0.5,1]) cylinder(h=24, r=deportX+3);
 		translate([deportX*4/3,12,0]) rotate([90,0,0]) cylinder(h=24, r=3+deportX/2);
-		translate([deportX+6,0,tigeH]) dovetail(0.2);
-		translate([deportX+8,0,tigeH]) dovetail(0.2);		
+		translate([deportX+9,0,tigeH]) dovetail(jeu);		
+		translate([deportX+3,0,tigeH]) dovetail(jeu);		
 		translate([0,0,-20]) stepper();
 	}
 }
@@ -73,13 +73,13 @@ module servoholder()
 		translate([1,-22.5,-2]) cube([9,35,16]);
 		translate([0,0,0.1]) servo();
 	}
-	translate([6,0,-2]) dovetail(0);
+	translate([5.5,0,-2]) dovetail(-jeu);
 }
 
 module tige()
 {
 	tigeservo();
-	translate([deportX,0,tigeH]) servoholder();
+	translate([deportX,0,tigeH+2]) servoholder();
 }
 
 module pied()

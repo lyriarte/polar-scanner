@@ -45,18 +45,6 @@ module servoSG90() {
                 }
             }
         }
-        translate([-(plateL - L) / 2 + screwHoleCenter, l/2, plateHPos]) {
-            cylinder(d=screwHoleD, h=10, $fn=180, center=true);
-        }
-        translate([-(plateL - L) / 2 - 1, l / 2 - holeSize / 2, plateHPos - 1]) {
-            cube([3,holeSize,4]);
-        }
-        translate([plateL - (plateL - L) / 2 - screwHoleCenter, l / 2, plateHPos - 1]) {
-            cylinder(d=screwHoleD, h=10, $fn=180, center=true);
-        }
-        translate([plateL- (plateL - L) / 2 - screwHoleCenter, l / 2 - holeSize / 2, plateHPos -1]) {
-            cube([3,holeSize,4]);
-        }
     }
 }
 
