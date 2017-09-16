@@ -16,8 +16,8 @@
 /* 
  * ultra sonic telemeter mesure
  */
-#define INECHO 8
-#define TRIGGER 9
+#define INECHO 10
+#define TRIGGER 11
 #define ECHO_TIMEOUT 100000
 #define ECHO2CM(x) (x/60)
 #define MAX_CM 1000
@@ -25,15 +25,15 @@
 /* 
  * servo
  */
-#define SRV 7
+#define SRV 12
 
 /* 
  * stepper
  */
-#define STEP1 5
-#define STEP2 4
-#define STEP3 3
-#define STEP4 2
+#define STEP1 9
+#define STEP2 8
+#define STEP3 7
+#define STEP4 6
 #define STEPPERMS 5
 
 /* 
