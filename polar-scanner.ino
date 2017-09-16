@@ -10,7 +10,7 @@
  * **** **** **** **** **** ****/
 
 #define BPS_HOST 9600
-#define COMMS_BUFFER_SIZE 32
+#define COMMS_BUFFER_SIZE 1024
 #define SERIAL_HOST_DELAY_MS 10000
 
 /* 
