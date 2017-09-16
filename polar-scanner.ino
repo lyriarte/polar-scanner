@@ -12,7 +12,7 @@
 #define BPS_HOST 9600
 #define COMMS_BUFFER_SIZE 1024
 #define SERIAL_HOST_DELAY_MS 10000
-
+#define SCAN_STEP_DELAY_MS 600
 /* 
  * ultra sonic telemeter mesure
  */
@@ -45,6 +45,7 @@ enum {
 	IN_CMD,
 	IN_SERVO,
 	IN_STEPPER,
+	IN_SCAN_PARAMETERS,
 	SENSOR_MESURE
 };
 
@@ -148,6 +149,28 @@ int telemeterMesure() {
 }
 
 /* 
+ * telemeter scan
+ */
+int telemeterscan(int stepperStep, int stepperN, int servoStep, int servoN, int servoFrom) {
+	int stepperInc, servoInc;
+	Serial.println();
+	for (stepperInc=0; stepperInc<stepperN; stepperInc++) {
+		Serial.print(stepperInc * stepperStep);
+		Serial.print(" / ");
+		for (servoInc=0; servoInc<servoN; servoInc++) {
+			servoCommand(servoFrom + (servoInc * servoStep));
+			delay(SCAN_STEP_DELAY_MS);
+			Serial.print(servoFrom + (servoInc * servoStep));
+			Serial.print(":");
+			Serial.print(telemeterMesure());
+			Serial.print(" ");
+		}
+		Serial.println();
+		stepperCommand(stepperStep);
+	}
+}
+
+/* 
  * userIO
  */
 char * userInput(char * message) {
@@ -194,6 +217,8 @@ int stateTransition(int currentState) {
 				newState = IN_STEPPER;
 			else if (!strcmp(input,"MESURE"))
 				newState = SENSOR_MESURE;
+			else if (!strcmp(input,"SCAN"))
+				newState = IN_SCAN_PARAMETERS;
 			break;
 
 		case IN_SERVO:
@@ -212,6 +237,27 @@ int stateTransition(int currentState) {
 			newState = IN_CMD;
 			break;
 
+		case IN_SCAN_PARAMETERS:
+			int stSt, stNb, srSt, srNb, srFr;
+			if (!(input = userInput("STEPPER STEP: ")))
+				while (!(input = userInput(NULL)));
+			stSt = atoi(input);
+			if (!(input = userInput("STEPPER NBR: ")))
+				while (!(input = userInput(NULL)));
+			stNb = atoi(input);
+			if (!(input = userInput("SERVO STEP: ")))
+				while (!(input = userInput(NULL)));
+			srSt = atoi(input);
+			if (!(input = userInput("SERVO NBR: ")))
+				while (!(input = userInput(NULL)));
+			srNb = atoi(input);
+			if (!(input = userInput("SERVO FROM: ")))
+				while (!(input = userInput(NULL)));
+			srFr = atoi(input);
+			telemeterscan(stSt, stNb, srSt, srNb, srFr);
+			newState = IN_CMD;
+			break;
+
 		case SENSOR_MESURE:
 			value = telemeterMesure();
 			Serial.println(value);
@@ -226,5 +272,6 @@ int stateTransition(int currentState) {
 }
 
 void loop() {
+//	telemeterscan(64, 8, 30, 4, 30);
 	currentState = stateTransition(currentState);
 }
