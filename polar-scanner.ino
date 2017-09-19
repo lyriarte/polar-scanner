@@ -3,6 +3,8 @@
  * License: BSD <http://www.opensource.org/licenses/bsd-license.php>
  */
 
+#include <stdio.h>
+
 #include <Servo.h> 
 
 /* **** **** **** **** **** ****
@@ -153,21 +155,22 @@ int telemeterMesure() {
  */
 int telemeterscan(int stepperStep, int stepperN, int servoStep, int servoN, int servoFrom) {
 	int stepperInc, servoInc;
-	Serial.println();
+	int buflen;
+	buflen = sprintf(commsBuffer, "\n");
 	for (stepperInc=0; stepperInc<stepperN; stepperInc++) {
-		Serial.print(stepperInc * stepperStep);
-		Serial.print(" / ");
 		for (servoInc=0; servoInc<servoN; servoInc++) {
 			servoCommand(servoFrom + (servoInc * servoStep));
 			delay(SCAN_STEP_DELAY_MS);
-			Serial.print(servoFrom + (servoInc * servoStep));
-			Serial.print(":");
-			Serial.print(telemeterMesure());
-			Serial.print(" ");
+			if (COMMS_BUFFER_SIZE - buflen < 10) {
+				Serial.print(commsBuffer);
+				buflen=0;
+			}
+			buflen += sprintf(commsBuffer+buflen, "%04d ", telemeterMesure());
 		}
-		Serial.println();
+		buflen += sprintf(commsBuffer+buflen, "\n");
 		stepperCommand(stepperStep);
 	}
+	Serial.print(commsBuffer);
 }
 
 /* 
