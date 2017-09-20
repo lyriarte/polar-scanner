@@ -1,0 +1,68 @@
+## Polar Scanner
+
+### Commands
+
+  * ```SERVO <ANGLE>``` : sensor rotation on the X axis, from 0 to 180 degrees
+  * ```STEPPER <STEPS>``` : sensor rotation on the Y axis. A 360 degrees rotation on the 28BYJ is 512 steps.
+  * ```MESURE``` : telemeter sensor mesure in centimeters
+  * ```SCAN <STEPPER STEP> <STEPPER NBR> <SERVO STEP> <SERVO NBR> <SERVO FROM>``` : Performs ```<STEPPER NBR> * <SERVO NBR>``` mesures.
+
+### Sample session
+
+  * Command:
+
+```
+./arduino_chat.py /dev/ttyUSB0 9600 SERVO 90 MESURE SERVO 105 MESURE SERVO 90 MESURE STEPPER -256 SCAN 32 8 5 8 60
+```
+
+  * Chat log:
+
+```
+CMD: 
+SERVO
+ANGLE: 
+90
+CMD: 
+MESURE
+14
+CMD: 
+SERVO
+ANGLE: 
+105
+CMD: 
+MESURE
+14
+CMD: 
+SERVO
+ANGLE: 
+90
+CMD: 
+MESURE
+14
+CMD: 
+STEPPER
+STEPS: 
+-256
+CMD: 
+SCAN
+STEPPER STEP: 
+32
+STEPPER NBR: 
+8
+SERVO STEP: 
+5
+SERVO NBR: 
+8
+SERVO FROM: 
+60
+
+0075 0074 0074 0051 0050 0049 0049 0049 
+1000 0076 0075 0074 1000 0183 0019 0017 
+0104 0103 0103 0026 0105 0165 0019 0018 
+0064 0097 0063 0063 0083 0068 0060 0020 
+0062 0061 0061 0060 0034 0034 0034 0034 
+0062 0055 0051 0043 0033 0032 0024 0024 
+0042 0036 0035 0034 0032 0032 0031 0018 
+0025 0018 0019 0020 0020 0017 0016 0015 
+CMD: 
+```
