@@ -8,9 +8,10 @@
 
 <script type="text/javascript">
 
+var host = "polar-scanner";
 var gll = new gllimpx();
 
-var outputCanvas, dragAction, modelText, logArea;
+var outputCanvas, dragAction, modelText, commandText, logArea;
 
 function initScene(text) {
 	gll.parseX3d(text);
@@ -32,12 +33,51 @@ function canvasOnMouseMove(event) {
 	}
 }
 
+function log(text) {
+	logArea.innerHTML += text;
+}
+
+function clearlog() {
+	logArea.innerHTML = "";
+}
+
+function sendCommand(text) {
+	log("\n> " + text + "\n");
+	var xmlhttp = new XMLHttpRequest();
+	var url = "http://" + host + "/" + text;
+
+	xmlhttp.onreadystatechange = function() {
+		if (this.status == 200 && this.readyState == 4)
+			log(this.responseText);
+	}
+
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+}
+
+function argsFromQueryString(queryString) {
+	var args = {};
+	if (!queryString)
+		return args;
+	var getVars = queryString.split("\&");
+	for (var i=0; i<getVars.length; i++) {
+		var varVal = getVars[i].split("\=");
+		if (varVal.length == 2)
+			args[varVal[0]] = varVal[1];
+	}
+	return args;
+}
+
 function initView() {
 	outputCanvas = document.getElementById("outputCanvas");
 	dragAction = document.getElementById("dragAction");
 	modelText = document.getElementById("modelText");
+	commandText = document.getElementById("commandText");
 	logArea = document.getElementById("logArea");
 	initScene(modelText.value);
+	var args = argsFromQueryString(window.location.toString().split("\?")[1]);
+	if (args.host)
+		host = args.host;
 }
 
 </script>
@@ -58,11 +98,12 @@ function initView() {
 		<option>Translate</option>
 		<option>Zoom</option>
 		</select>
-		<input type="button" value="Load" onClick="initScene(modelText.value)"/>
+		<input type="button" value="Reload x3d" onClick="initScene(modelText.value)"/>
+		<input style="float:right" type="button" value="Clear log" onClick="clearlog()"/>
 	</td>
 	<td style="width:33%">
-		<input style="width:80%" type="text"/>
-		<input style="width:17%" type="button" value="Send"/>
+		<input id="commandText" style="width:80%" type="text"/>
+		<input style="width:17%" type="button" value="Send" onClick="sendCommand(commandText.value);commandText.value=''"/>
 	</td>
 </tr>
 <tr>
