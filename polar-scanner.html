@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Polar Scanner</title>
+
+<script type="text/javascript" src="gllimpx.js"></script>
+
+<script type="text/javascript">
+
+var gll = new gllimpx();
+
+var outputCanvas, dragAction, modelText, logArea;
+
+function initScene(text) {
+	gll.parseX3d(text);
+	gll.setCanvas(outputCanvas);
+	gll.redrawCanvas();
+}
+
+function canvasOnMouseMove(event) {
+	switch (dragAction.selectedIndex) {
+	case 0:
+		gll.rotateOnMouseMove(event);
+		break;
+	case 1:
+		gll.translateOnMouseMove(event);
+		break;
+	case 2:
+		gll.zoomOnMouseMove(event);
+		break;
+	}
+}
+
+function initView() {
+	outputCanvas = document.getElementById("outputCanvas");
+	dragAction = document.getElementById("dragAction");
+	modelText = document.getElementById("modelText");
+	logArea = document.getElementById("logArea");
+	initScene(modelText.value);
+}
+
+</script>
+</head>
+
+
+<body onload="initView()">
+
+<center><h1>Polar Scanner</h1></center>
+
+<hr/>
+
+<table style="width:100%">
+<tr>
+	<td style="width:66%">
+		<select id="dragAction">
+		<option>Rotate</option>
+		<option>Translate</option>
+		<option>Zoom</option>
+		</select>
+		<input type="button" value="Load" onClick="initScene(modelText.value)"/>
+	</td>
+	<td style="width:33%">
+		<input style="width:80%" type="text"/>
+		<input style="width:17%" type="button" value="Send"/>
+	</td>
+</tr>
+<tr>
+	<td style="width:66%">
+	<canvas id="outputCanvas" style="width:100%;min-width:640px;min-height:480px;border-style:solid;border-width:1px"
+		onmousedown="gll.onMouseDown(event)"
+		onmousemove="canvasOnMouseMove(event)"
+		onmouseup="gll.onMouseUp(event)"
+		onmouseout="gll.onMouseUp(event)"
+		>
+	</canvas>
+	<textarea id="modelText" style="width:100%;min-width:640px;min-height:240px">
+	<X3D profile='Immersive' version='3.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
+		<Scene>
+			<Viewpoint position="0 30 100"/>
+			<Shape DEF="ScanResult">
+			</Shape>			
+			<Shape>
+			<Appearance DEF="GrisClair">
+				<Material diffuseColor="0.9 0.9 0.9"/>
+			</Appearance>
+			<Sphere radius='10'/>
+			</Shape>  
+			<Transform scale="10 10 10">
+				<Transform>
+					<Transform>
+						<Shape>
+							<Appearance DEF="Gris">
+								<Material diffuseColor="0.7 0.7 0.7"/>
+							</Appearance>
+							<Cylinder radius="0.1" height="1.0"/>
+						</Shape>
+					</Transform>
+					<Transform translation="0.0 0.6 0.0">
+						<Shape>
+							<Appearance DEF="Vert">
+								<Material diffuseColor="0.6 1.0 0.6"/>
+							</Appearance>
+							<Cone height="0.2" bottomRadius="0.2"/>
+						</Shape>
+					</Transform>
+				</Transform>
+				<Transform rotation="0.0 0.0 1.0 -1.57">
+					<Transform>
+						<Shape>
+							<Appearance USE="Gris"/>
+							<Cylinder radius="0.1" height="1.0"/>
+						</Shape>
+					</Transform>
+					<Transform translation="0.0 0.6 0.0">
+						<Shape>
+							<Appearance DEF="Rouge">
+								<Material diffuseColor="1.0 0.6 0.6"/>
+							</Appearance>
+							<Cone height="0.2" bottomRadius="0.2"/>
+						</Shape>
+					</Transform>
+				</Transform>
+				<Transform rotation="1.0 0.0 0.0 1.57">
+					<Transform>
+						<Shape>
+							<Appearance USE="Gris"/>
+							<Cylinder radius="0.1" height="1.0"/>
+						</Shape>
+					</Transform>
+					<Transform translation="0.0 0.6 0.0">
+						<Shape>
+							<Appearance DEF="Bleu">
+								<Material diffuseColor="0.6 0.6 1.0"/>
+							</Appearance>
+							<Cone height="0.2" bottomRadius="0.2"/>
+						</Shape>
+					</Transform>
+				</Transform>
+			</Transform>
+		</Scene>
+	</X3D>
+	</textarea>
+	</td>
+	<td style="width:33%">
+		<pre id="logArea" style="width:100%;height:100%;max-width:640px;height:720px;border-style:solid;border-width:1px;overflow-x:scroll;overflow-y:scroll;background-color:#f0f0f0"></pre>
+	</td>
+</table>
+
+</body>
+</html>
