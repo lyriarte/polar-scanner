@@ -5,11 +5,13 @@
 <title>Polar Scanner</title>
 
 <script type="text/javascript" src="gllimpx.js"></script>
+<script type="text/javascript" src="polar-scanner-x3d.js"></script>
 
 <script type="text/javascript">
 
 var host = "polar-scanner";
 var gll = new gllimpx();
+var scanner = null;
 
 var outputCanvas, dragAction, modelText, commandText, logArea;
 
@@ -41,14 +43,46 @@ function clearlog() {
 	logArea.innerHTML = "";
 }
 
+function scanCommand(text) {
+	if (text == "SCAN") {
+		scanner = new PolarScanner();
+		scanner.args = [];
+	}
+	else if (scanner) {
+		scanner.args.push(Number(text));
+	}
+}
+
+function scanResponse(text) {
+	if (!scanner || scanner.args.length < 5)
+		return;
+	var regexp = /[\s]+/gi;
+	var results = text.split("CMD: ")[0].replace(regexp," ");
+	var scan = results.split(" ");
+	var indexedFaceSet = scanner.x3dScan(scanner.args[0], scanner.args[1], scanner.args[2], scanner.args[3], scanner.args[4], scan);
+	var x3dText = modelText.value;
+	var x3dBlocks = x3dText.split('<Shape DEF="ScanResult">');
+	x3dText = x3dBlocks[0] + '<Shape DEF="ScanResult">' + "\n" + indexedFaceSet;
+	var x3dBlocks2 = x3dBlocks[1].split('</Shape>');
+	for (var i=1; i<x3dBlocks2.length; i++)
+		x3dText += '</Shape>' + x3dBlocks2[i];
+	modelText.value = x3dText;
+	initScene(modelText.value);
+	scanner = null;
+}
+
 function sendCommand(text) {
 	log("\n> " + text + "\n");
+	scanCommand(text);
+
 	var xmlhttp = new XMLHttpRequest();
 	var url = "http://" + host + "/" + text;
 
 	xmlhttp.onreadystatechange = function() {
-		if (this.status == 200 && this.readyState == 4)
+		if (this.status == 200 && this.readyState == 4) {
 			log(this.responseText);
+			scanResponse(this.responseText);
+		}
 	}
 
 	xmlhttp.open("GET", url, true);
