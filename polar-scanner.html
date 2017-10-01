@@ -13,16 +13,18 @@ var host = "polar-scanner";
 var gll = new gllimpx();
 var scanner = null;
 
-var outputCanvas, dragAction, modelText, commandText, logArea;
+var view = {};
+var controls = ["outputCanvas", "dragAction", "modelText", "commandText", "logArea"];
+
 
 function initScene(text) {
 	gll.parseX3d(text);
-	gll.setCanvas(outputCanvas);
+	gll.setCanvas(view.outputCanvas);
 	gll.redrawCanvas();
 }
 
 function canvasOnMouseMove(event) {
-	switch (dragAction.selectedIndex) {
+	switch (view.dragAction.selectedIndex) {
 	case 0:
 		gll.rotateOnMouseMove(event);
 		break;
@@ -36,11 +38,11 @@ function canvasOnMouseMove(event) {
 }
 
 function log(text) {
-	logArea.innerHTML += text;
+	view.logArea.innerHTML += text;
 }
 
 function clearlog() {
-	logArea.innerHTML = "";
+	view.logArea.innerHTML = "";
 }
 
 function scanCommand(text) {
@@ -60,14 +62,14 @@ function scanResponse(text) {
 	var results = text.split("CMD: ")[0].replace(regexp," ");
 	var scan = results.split(" ");
 	var indexedFaceSet = scanner.x3dScan(scanner.args[0], scanner.args[1], scanner.args[2], scanner.args[3], scanner.args[4], scan);
-	var x3dText = modelText.value;
+	var x3dText = view.modelText.value;
 	var x3dBlocks = x3dText.split('<Shape DEF="ScanResult">');
 	x3dText = x3dBlocks[0] + '<Shape DEF="ScanResult">' + "\n" + indexedFaceSet;
 	var x3dBlocks2 = x3dBlocks[1].split('</Shape>');
 	for (var i=1; i<x3dBlocks2.length; i++)
 		x3dText += '</Shape>' + x3dBlocks2[i];
-	modelText.value = x3dText;
-	initScene(modelText.value);
+	view.modelText.value = x3dText;
+	initScene(view.modelText.value);
 	scanner = null;
 }
 
@@ -103,12 +105,8 @@ function argsFromQueryString(queryString) {
 }
 
 function initView() {
-	outputCanvas = document.getElementById("outputCanvas");
-	dragAction = document.getElementById("dragAction");
-	modelText = document.getElementById("modelText");
-	commandText = document.getElementById("commandText");
-	logArea = document.getElementById("logArea");
-	initScene(modelText.value);
+	controls.map(function (x) {view[x] = document.getElementById(x);});
+	initScene(view.modelText.value);
 	var args = argsFromQueryString(window.location.toString().split("\?")[1]);
 	if (args.host)
 		host = args.host;
@@ -132,12 +130,12 @@ function initView() {
 		<option>Translate</option>
 		<option>Zoom</option>
 		</select>
-		<input type="button" value="Reload x3d" onClick="initScene(modelText.value)"/>
+		<input type="button" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
 		<input style="float:right" type="button" value="Clear log" onClick="clearlog()"/>
 	</td>
 	<td style="width:33%">
 		<input id="commandText" style="width:80%" type="text"/>
-		<input style="width:17%" type="button" value="Send" onClick="sendCommand(commandText.value);commandText.value=''"/>
+		<input style="width:17%" type="button" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
 	</td>
 </tr>
 <tr>
