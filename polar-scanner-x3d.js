@@ -48,12 +48,12 @@ PolarScanner.prototype.indexedFaceSet = function(stpInc, stpNbr, srvInc, srvNbr,
 	}
 
 	var indexes = [];
-	for (var i=0; i<stpNbr; i++) {
+	for (var i=0; i<stpNbr-1; i++) {
 		for (var j=0; j<srvNbr-1; j++) {
 			indexes.push(i * srvNbr + j);
 			indexes.push(i * srvNbr + j+1);
-			indexes.push(((i+1)%stpNbr) * srvNbr + j+1);
-			indexes.push(((i+1)%stpNbr) * srvNbr + j);
+			indexes.push((i+1) * srvNbr + j+1);
+			indexes.push((i+1) * srvNbr + j);
 			indexes.push(-1);
 		}
 	}
