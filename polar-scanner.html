@@ -14,7 +14,7 @@ var gll = new gllimpx();
 var scanner = null;
 
 var view = {};
-var controls = ["outputCanvas", "dragAction", "modelText", "commandText", "logArea"];
+var controls = ["outputCanvas", "dragAction", "modelText", "commandText", "logArea", "lastscan"];
 
 
 function initScene(text) {
@@ -61,7 +61,24 @@ function scanResponse(text) {
 	var regexp = /[\s]+/gi;
 	var results = text.split("CMD: ")[0].replace(regexp," ");
 	var scan = results.split(" ");
-	var indexedFaceSet = scanner.x3dScan(scanner.args[0], scanner.args[1], scanner.args[2], scanner.args[3], scanner.args[4], scan);
+	var scanObject = {
+		stpInc: scanner.args[0], 
+		stpNbr: scanner.args[1], 
+		srvInc: scanner.args[2], 
+		srvNbr: scanner.args[3], 
+		srvFrm: scanner.args[4], 
+		scan: scan
+	}
+	view.lastscan.value = JSON.stringify(scanObject);
+	viewX3dScan(scanObject, scanner);
+	scanner = null;
+}
+
+function viewX3dScan(scanObject, scannerObject) {
+	var indexedFaceSet = scannerObject.x3dScan(
+		scanObject.stpInc, scanObject.stpNbr, 
+		scanObject.srvInc, scanObject.srvNbr, scanObject.srvFrm, 
+		scanObject.scan);
 	var x3dText = view.modelText.value;
 	var x3dBlocks = x3dText.split('<Shape DEF="ScanResult">');
 	x3dText = x3dBlocks[0] + '<Shape DEF="ScanResult">' + "\n" + indexedFaceSet;
@@ -70,7 +87,6 @@ function scanResponse(text) {
 		x3dText += '</Shape>' + x3dBlocks2[i];
 	view.modelText.value = x3dText;
 	initScene(view.modelText.value);
-	scanner = null;
 }
 
 function sendCommand(text) {
@@ -131,6 +147,7 @@ function initView() {
 		<option>Zoom</option>
 		</select>
 		<input type="button" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
+		<input type="button" value="Reload scan" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
 		<input style="float:right" type="button" value="Clear log" onClick="clearlog()"/>
 	</td>
 	<td style="width:33%">
@@ -147,7 +164,7 @@ function initView() {
 		onmouseout="gll.onMouseUp(event)"
 		>
 	</canvas>
-	<textarea id="modelText" style="width:100%;min-width:640px;min-height:240px">
+	<textarea id="modelText" style="width:100%;min-width:640px;min-height:200px">
 	<X3D profile='Immersive' version='3.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
 		<Scene>
 			<Viewpoint position="0 30 100"/>
@@ -214,10 +231,13 @@ function initView() {
 		</Scene>
 	</X3D>
 	</textarea>
+	<textarea id="lastscan" style="width:100%;min-width:640px;min-height:40px">
+	</textarea>
 	</td>
 	<td style="width:33%">
 		<pre id="logArea" style="width:100%;height:100%;max-width:640px;height:720px;border-style:solid;border-width:1px;overflow-x:scroll;overflow-y:scroll;background-color:#f0f0f0"></pre>
 	</td>
+	</tr>
 </table>
 
 </body>
