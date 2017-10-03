@@ -61,6 +61,10 @@ function scanResponse(text) {
 	var regexp = /[\s]+/gi;
 	var results = text.split("CMD: ")[0].replace(regexp," ");
 	var scan = results.split(" ");
+	if (scan[0].length == 0) 
+		scan.shift();
+	if (scan[scan.length-1].length == 0) 
+		scan.pop();
 	var scanObject = {
 		stpInc: scanner.args[0], 
 		stpNbr: scanner.args[1], 
