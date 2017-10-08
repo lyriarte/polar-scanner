@@ -148,9 +148,6 @@ function initView() {
 
 <hr/>
 
-<table style="width:100%">
-<tr>
-	<td style="width:66%">
 		<select id="dragAction" class="mdl-button" >
 		<option>Rotate</option>
 		<option>Translate</option>
@@ -158,25 +155,19 @@ function initView() {
 		</select>
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload scan" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
-		<input style="float:right" type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
-	</td>
-	<td style="width:33%">
-		<div style="width:80%" class="mdl-textfield mdl-js-textfield">
-			<input id="commandText" style="width:100%" type="text" class="mdl-textfield__input">
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
+		<div class="mdl-textfield mdl-js-textfield">
+			<input id="commandText" type="text" class="mdl-textfield__input">
 		</div>
-		<input style="width:17%" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
-	</td>
-</tr>
-<tr>
-	<td style="width:66%">
-	<canvas id="outputCanvas" style="width:100%;min-width:640px;min-height:480px;border-style:solid;border-width:1px"
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
+	<canvas id="outputCanvas" 
 		onmousedown="gll.onMouseDown(event)"
 		onmousemove="canvasOnMouseMove(event)"
 		onmouseup="gll.onMouseUp(event)"
 		onmouseout="gll.onMouseUp(event)"
 		>
 	</canvas>
-	<div class="mdl-textfield mdl-js-textfield" style="width:66%;min-width:440px;height:100%;min-height:200px">
+	<div class="mdl-textfield mdl-js-textfield" >
 	<textarea class="mdl-textfield__input" type="text" id="modelText">
 	<X3D profile='Immersive' version='3.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
 		<Scene>
@@ -245,18 +236,13 @@ function initView() {
 	</X3D>
 	</textarea>
 	</div>
-	<div class="mdl-textfield mdl-js-textfield" style="width:33%;min-width:200px;height:100%;min-height:200px">
+	<div class="mdl-textfield mdl-js-textfield">
 	<textarea class="mdl-textfield__input" type="text" id="lastscan">
 	</textarea>
 	</div>
-	</td>
-	<td style="width:33%">
-		<div style="width:100%;height:100%" class="mdl-textfield mdl-js-textfield">
-		<pre id="logArea" style="width:100%;height:100%;max-width:640px;height:720px;border-style:solid;border-width:1px;overflow-x:scroll;overflow-y:scroll;background-color:#f0f0f0"></pre>
+		<div class="mdl-textfield mdl-js-textfield">
+		<pre id="logArea"></pre>
 		</div>
-	</td>
-	</tr>
-</table>
 
 </body>
 </html>
