@@ -161,7 +161,9 @@ function initView() {
 		<input style="float:right" type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
 	</td>
 	<td style="width:33%">
-		<input id="commandText" style="width:80%" type="text"/>
+		<div style="width:80%" class="mdl-textfield mdl-js-textfield">
+			<input id="commandText" style="width:100%" type="text" class="mdl-textfield__input">
+		</div>
 		<input style="width:17%" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
 	</td>
 </tr>
