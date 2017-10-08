@@ -156,13 +156,13 @@ function initView() {
 		<option>Translate</option>
 		<option>Zoom</option>
 		</select>
-		<input type="button" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
-		<input type="button" value="Reload scan" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
-		<input style="float:right" type="button" value="Clear log" onClick="clearlog()"/>
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload scan" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
+		<input style="float:right" type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
 	</td>
 	<td style="width:33%">
 		<input id="commandText" style="width:80%" type="text"/>
-		<input style="width:17%" type="button" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
+		<input style="width:17%" type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
 	</td>
 </tr>
 <tr>
