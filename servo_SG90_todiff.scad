@@ -2,7 +2,7 @@ sg90L = 22.8 + jeu;
 sg90l = 12.6 + jeu;
 sg90h = 22.8;
 sg90topCylinderH = 3.4 + jeu;
-sg90axisD = 4 + jeu;
+sg90axisD = 4 + jeu * 2;
 
 module servoSG90() {
     L = sg90L;
