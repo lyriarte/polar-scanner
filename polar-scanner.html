@@ -175,14 +175,14 @@ function initView() {
 </div>
 <div class="mdl-grid">
 	<div class="mdl-cell mdl-cell--8-col">
-	<canvas id="outputCanvas" 
+	<canvas id="outputCanvas" style="width:100%;min-width:640px;min-height:480px;border-style:solid;border-width:1px"
 		onmousedown="gll.onMouseDown(event)"
 		onmousemove="canvasOnMouseMove(event)"
 		onmouseup="gll.onMouseUp(event)"
 		onmouseout="gll.onMouseUp(event)"
 		>
 	</canvas>
-	<div class="mdl-textfield mdl-js-textfield" >
+	<div class="mdl-textfield mdl-js-textfield" style="width:66%;min-width:440px;min-height:200px">
 	<textarea class="mdl-textfield__input" type="text" id="modelText">
 	<X3D profile='Immersive' version='3.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
 		<Scene>
@@ -251,14 +251,14 @@ function initView() {
 	</X3D>
 	</textarea>
 	</div>
-	<div class="mdl-textfield mdl-js-textfield">
+	<div class="mdl-textfield mdl-js-textfield" style="width:33%;min-width:200px;min-height:200px">
 	<textarea class="mdl-textfield__input" type="text" id="lastscan">
 	</textarea>
 	</div>
 	</div>
 	<div class="mdl-cell mdl-cell--4-col">
-		<div class="mdl-textfield mdl-js-textfield">
-		<pre id="logArea"></pre>
+		<div style="width:100%;height:100%" class="mdl-textfield mdl-js-textfield">
+		<pre id="logArea" style="width:100%;height:100%;min-width:200px;max-width:640px;height:720px;border-style:solid;border-width:1px;overflow-x:scroll;overflow-y:scroll;background-color:#f0f0f0"></pre>
 		</div>
 	</div>
 </div>
