@@ -147,19 +147,34 @@ function initView() {
 <center><h1>Polar Scanner</h1></center>
 
 <hr/>
-
+<div class="mdl-grid">
+	<div class="mdl-cell mdl-cell--2-col">
 		<select id="dragAction" class="mdl-button" >
 		<option>Rotate</option>
 		<option>Translate</option>
 		<option>Zoom</option>
 		</select>
+	</div>
+	<div class="mdl-cell mdl-cell--2-col">
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
+	</div>
+	<div class="mdl-cell mdl-cell--2-col">
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload scan" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
+	</div>
+	<div class="mdl-cell mdl-cell--1-col">
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
+	</div>
+	<div class="mdl-cell mdl-cell--2-col">
 		<div class="mdl-textfield mdl-js-textfield">
 			<input id="commandText" type="text" class="mdl-textfield__input">
 		</div>
+	</div>
+	<div class="mdl-cell mdl-cell--1-col">
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
+	</div>
+</div>
+<div class="mdl-grid">
+	<div class="mdl-cell mdl-cell--8-col">
 	<canvas id="outputCanvas" 
 		onmousedown="gll.onMouseDown(event)"
 		onmousemove="canvasOnMouseMove(event)"
@@ -240,9 +255,12 @@ function initView() {
 	<textarea class="mdl-textfield__input" type="text" id="lastscan">
 	</textarea>
 	</div>
+	</div>
+	<div class="mdl-cell mdl-cell--4-col">
 		<div class="mdl-textfield mdl-js-textfield">
 		<pre id="logArea"></pre>
 		</div>
-
+	</div>
+</div>
 </body>
 </html>
