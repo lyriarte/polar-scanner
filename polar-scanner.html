@@ -159,6 +159,11 @@ function initView() {
   </header>
   <div class="mdl-layout__drawer">
     <span class="mdl-layout-title">Polar Scanner</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" onClick="initScene(view.modelText.value)">Reload model</a>
+      <a class="mdl-navigation__link" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())">Reload data</a>
+      <a class="mdl-navigation__link" onClick="clearlog()">Clear log</a>
+    </nav>
   </div>
 
   <main class="mdl-layout__content">
