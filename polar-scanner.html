@@ -8,6 +8,7 @@
 <title>Polar Scanner</title>
 
 <link rel="stylesheet" type="text/css" href="lib/mdl/material.min.css">
+<link rel="stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
 <script src="lib/mdl/material.min.js"></script>
 
 <script type="text/javascript" src="gllimpx.js"></script>
@@ -144,48 +145,28 @@ function initView() {
 
 <body onload="initView()">
 
-<center><h1>Polar Scanner</h1></center>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <span class="mdl-layout-title">Polar Scanner</span>
+    </div>
+    <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+      <a href="#scan-model" class="mdl-layout__tab">Scan Model</a>
+      <a href="#scan-data" class="mdl-layout__tab">Scan Data</a>
+      <a href="#scan-view" class="mdl-layout__tab">Scan View</a>
+      <a href="#command-chat" class="mdl-layout__tab is-active">Command Chat</a>
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Polar Scanner</span>
+  </div>
 
-<hr/>
-<div class="mdl-grid">
-	<div class="mdl-cell mdl-cell--2-col">
-		<select id="dragAction" class="mdl-button" >
-		<option>Rotate</option>
-		<option>Translate</option>
-		<option>Zoom</option>
-		</select>
-	</div>
-	<div class="mdl-cell mdl-cell--2-col">
-		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload x3d" onClick="initScene(view.modelText.value)"/>
-	</div>
-	<div class="mdl-cell mdl-cell--2-col">
-		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload scan" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
-	</div>
-	<div class="mdl-cell mdl-cell--2-col mdl-layout-spacer">
-	</div>
-	<div class="mdl-cell mdl-cell--2-col">
-		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
-	</div>
-	<div class="mdl-cell mdl-cell--1-col">
-		<div class="mdl-textfield mdl-js-textfield">
-			<input id="commandText" type="text" class="mdl-textfield__input">
-		</div>
-	</div>
-	<div class="mdl-cell mdl-cell--1-col">
-		<input type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
-	</div>
-</div>
-<div class="mdl-grid">
-	<div class="mdl-cell mdl-cell--8-col">
-	<canvas id="outputCanvas" style="width:100%;min-width:640px;min-height:480px;border-style:solid;border-width:1px"
-		onmousedown="gll.onMouseDown(event)"
-		onmousemove="canvasOnMouseMove(event)"
-		onmouseup="gll.onMouseUp(event)"
-		onmouseout="gll.onMouseUp(event)"
-		>
-	</canvas>
-	<div class="mdl-textfield mdl-js-textfield" style="width:66%;min-width:440px;min-height:200px">
-	<textarea class="mdl-textfield__input" type="text" id="modelText">
+  <main class="mdl-layout__content">
+
+    <section class="mdl-layout__tab-panel" id="scan-model">
+    <div class="page-content">
+	<div style="width:100%;height:100%" class="mdl-textfield mdl-js-textfield">
+	<textarea style="width:100%;height:100%;min-height:480px" class="mdl-textfield__input" type="text" id="modelText">
 	<X3D profile='Immersive' version='3.0' xmlns:xsd='http://www.w3.org/2001/XMLSchema-instance' xsd:noNamespaceSchemaLocation='http://www.web3d.org/specifications/x3d-3.0.xsd'>
 		<Scene>
 			<Viewpoint position="0 30 100"/>
@@ -253,16 +234,76 @@ function initView() {
 	</X3D>
 	</textarea>
 	</div>
-	<div class="mdl-textfield mdl-js-textfield" style="width:33%;min-width:200px;min-height:200px">
-	<textarea class="mdl-textfield__input" type="text" id="lastscan">
+    </div>
+    </section>
+
+    <section class="mdl-layout__tab-panel" id="scan-data">
+    <div class="page-content">
+	<div style="width:100%;height:100%" class="mdl-textfield mdl-js-textfield">
+    <textarea style="width:100%;height:100%;min-height:480px" class="mdl-textfield__input" type="text" id="lastscan">
 	</textarea>
 	</div>
-	</div>
-	<div class="mdl-cell mdl-cell--4-col">
-		<div style="width:100%;height:100%" class="mdl-textfield mdl-js-textfield">
-		<pre id="logArea" style="width:100%;height:100%;min-width:200px;max-width:640px;height:720px;border-style:solid;border-width:1px;overflow-x:scroll;overflow-y:scroll;background-color:#f0f0f0"></pre>
-		</div>
-	</div>
+    </div>
+    </section>
+
+    <section class="mdl-layout__tab-panel" id="scan-view">
+      <div class="page-content">
+      <div class="mdl-grid">
+	  <div class="mdl-cell mdl-cell--4-col">
+		<select id="dragAction" class="mdl-button" >
+		<option>Rotate</option>
+		<option>Translate</option>
+		<option>Zoom</option>
+		</select>
+	  </div>
+	  <div class="mdl-cell mdl-cell--4-col mdl-layout-spacer">
+	  </div>
+	  <div class="mdl-cell mdl-cell--2-col">
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload model" onClick="initScene(view.modelText.value)"/>
+	  </div>
+	  <div class="mdl-cell mdl-cell--2-col">
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Reload data" onclick="viewX3dScan(JSON.parse(view.lastscan.value),new PolarScanner())"/>
+	  </div>
+	  <div class="mdl-cell mdl-cell--12-col">
+	  <canvas id="outputCanvas" style="width:100%;height:100%;border-style:solid;border-width:1px"
+		onmousedown="gll.onMouseDown(event)"
+		onmousemove="canvasOnMouseMove(event)"
+		onmouseup="gll.onMouseUp(event)"
+		onmouseout="gll.onMouseUp(event)"
+		>
+	  </canvas>
+      </div>
+      </div>
+      </div>
+    </section>
+
+    <section class="mdl-layout__tab-panel is-active" id="command-chat">
+      <div class="page-content">
+	  <div class="mdl-grid">
+      <div class="mdl-cell mdl-cell--2-col">
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
+	  </div>
+	  <div class="mdl-cell mdl-cell--6-col mdl-layout-spacer">
+	  </div>
+	  <div class="mdl-cell mdl-cell--2-col">
+	  <div class="mdl-textfield mdl-js-textfield">
+		<input id="commandText" type="text" class="mdl-textfield__input">
+	  </div>
+	  </div>
+	  <div class="mdl-cell mdl-cell--2-col">
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent" value="Send" onClick="sendCommand(view.commandText.value);view.commandText.value=''"/>
+	  </div>
+	  <div class="mdl-cell mdl-cell--12-col">
+	  <div style="width:100%;height:100%" class="mdl-textfield mdl-js-textfield">
+		<pre id="logArea" style="width:100%;height:100%;min-height:480px;border-style:solid;border-width:1px;overflow-x:scroll;overflow-y:scroll;background-color:#f0f0f0"></pre>
+	  </div>
+	  </div>
+	  </div>
+      </div>
+    </section>
+
+  </main>
 </div>
+
 </body>
 </html>
