@@ -42,9 +42,9 @@ PolarScanner.prototype.indexedFaceSet = function(stpInc, stpNbr, srvInc, srvNbr,
 	for (var i=0; i<scan.length; i++) {
 		srvAngle = srvFrm + srvInc * (i % srvNbr);
 		stpAngle += i != 0 && i % srvNbr == 0 ? stpInc : 0;
-		coords.push((scan[i] * Math.cos(stpAngle)).toFixed(this._us_precision)); // x
+		coords.push((scan[i] * Math.sin(srvAngle) * Math.cos(stpAngle)).toFixed(this._us_precision)); // x
 		coords.push((scan[i] * Math.cos(srvAngle)).toFixed(this._us_precision)); // y
-		coords.push((scan[i] * Math.sin(stpAngle)).toFixed(this._us_precision)); // z
+		coords.push((scan[i] * Math.sin(srvAngle) * Math.sin(stpAngle)).toFixed(this._us_precision)); // z
 	}
 
 	var indexes = [];
