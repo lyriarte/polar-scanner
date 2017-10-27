@@ -288,7 +288,16 @@ function initView() {
       <div class="mdl-cell mdl-cell--2-col">
 		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="Clear log" onClick="clearlog()"/>
 	  </div>
-	  <div class="mdl-cell mdl-cell--6-col mdl-layout-spacer">
+	  <div class="mdl-cell mdl-cell--2-col">
+		  <input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="SERVO" onClick="sendCommand('SERVO')"/>
+		  <input class="mdl-slider mdl-js-slider" type="range" min="0" max="180" value="90" step="5">
+	  </div>
+	  <div class="mdl-cell mdl-cell--2-col">
+		  <input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="STEPPER" onClick="sendCommand('STEPPER')"/>
+		  <input class="mdl-slider mdl-js-slider" type="range" min="-256" max="256" value="0" step="8">
+	  </div>
+	  <div class="mdl-cell mdl-cell--2-col">
+		<input type="button" class="mdl-button mdl-js-button mdl-button--raised" value="MESURE" onClick="sendCommand('MESURE')"/>
 	  </div>
 	  <div class="mdl-cell mdl-cell--2-col">
 	  <div class="mdl-textfield mdl-js-textfield">
