@@ -25,6 +25,16 @@
 #define MAX_CM 1000
 
 /* 
+ * mesure configuration variables
+ */
+enum {
+	MAX,
+	COUNT,
+	NVARS
+};
+int mesureConfig[NVARS];
+
+/* 
  * servo
  */
 #define SRV 12
@@ -45,6 +55,9 @@ enum {
 	START,
 	ERROR,
 	IN_CMD,
+	IN_VAR,
+	IN_MAX,
+	IN_COUNT,
 	IN_SERVO,
 	IN_STEPPER,
 	IN_SCAN_PARAMETERS,
@@ -100,6 +113,8 @@ void setup() {
 	Serial.begin(BPS_HOST);
 	digitalWrite(TRIGGER, LOW);
 	currentState = START;
+	mesureConfig[MAX] = MAX_CM;
+	mesureConfig[COUNT] = 1;
 }
 
 /* 
@@ -142,11 +157,17 @@ void stepperCommand(int steps) {
 int telemeterMesure() {
 	unsigned long echoDuration;
 	unsigned int mesureCm;
-	digitalWrite(TRIGGER, HIGH);
-	delayMicroseconds(10);
-	digitalWrite(TRIGGER, LOW);
-	echoDuration = pulseIn(INECHO, HIGH, ECHO_TIMEOUT);
-	mesureCm = echoDuration ? ECHO2CM(echoDuration) : MAX_CM;
+	unsigned int mesureSum = 0;
+	for (int i=0; i<mesureConfig[COUNT]; i++) {
+		digitalWrite(TRIGGER, HIGH);
+		delayMicroseconds(10);
+		digitalWrite(TRIGGER, LOW);
+		echoDuration = pulseIn(INECHO, HIGH, ECHO_TIMEOUT);
+		mesureCm = echoDuration ? ECHO2CM(echoDuration) : mesureConfig[MAX];
+		mesureCm = min(mesureCm,mesureConfig[MAX]);
+		mesureSum += mesureCm;
+	}
+	mesureCm = mesureSum / mesureConfig[COUNT];
 	return mesureCm;
 }
 
@@ -222,6 +243,31 @@ int stateTransition(int currentState) {
 				newState = SENSOR_MESURE;
 			else if (!strcmp(input,"SCAN"))
 				newState = IN_SCAN_PARAMETERS;
+			else if (!strcmp(input,"SET"))
+				newState = IN_VAR;
+			break;
+
+		case IN_VAR:
+			if (!(input = userInput("VARIABLE: ")))
+				while (!(input = userInput(NULL)));
+			if (!strcmp(input,"MAX"))
+				newState = IN_MAX;
+			else if (!strcmp(input,"COUNT"))
+				newState = IN_COUNT;
+			break;
+
+		case IN_MAX:
+			if (!(input = userInput("DISTANCE MAX: ")))
+				while (!(input = userInput(NULL)));
+			mesureConfig[MAX] = atoi(input);
+			newState = IN_CMD;
+			break;
+
+		case IN_COUNT:
+			if (!(input = userInput("MESURE COUNT: ")))
+				while (!(input = userInput(NULL)));
+			mesureConfig[COUNT] = atoi(input);;
+			newState = IN_CMD;
 			break;
 
 		case IN_SERVO:
