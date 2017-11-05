@@ -321,6 +321,5 @@ int stateTransition(int currentState) {
 }
 
 void loop() {
-//	telemeterscan(64, 8, 30, 4, 30);
 	currentState = stateTransition(currentState);
 }
